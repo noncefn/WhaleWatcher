@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 1000px;
+}
+
+.tableHead {
+  font-weight: 600;
+  display: flex;
+}

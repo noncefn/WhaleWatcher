@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "whalewatcher-af026",
+  "private_key_id": "bd3981a1a3c55d83d350826281f6fba34e77c13d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC6rUVVW0NN8IqQ\ns5FZHOhO5GtUXiUjrvhK2g45e6Db6gdMqoitlnBPfx+uhozsDSlfKNZrpyMsToMs\n1dKbUYEZwOWmzklWOIFYFKhLddMwiImcSe6N6h8UF8u4LVGRF6b34K+6ZW493FLB\n+xBV0Fnb/XsiQootyAt4hgdNzPtL+sqXjcP7uanD/FKFQbFrmQ8TTLeh7xHV8tT1\nBhyx18Ey4Pp0b3a0fyb4BTcJHCOTVy+M8QuHMn4/ralcusWMeFdDrqNXbhHdjKKK\nE0DvgSorV0YKctNsobW7dxR08QTsfqGbfOfw6JIZ8u1GEXkijsVqByhOy9WaL+Fg\nPq+YtWeTAgMBAAECggEAJTjCX9wkJejGAEdFvoKEkaJ7AiYJer17FZW4C18qul7G\nGNPSD+a0uy0qWIbMl46iRq6iXnHDkiSPhEOYTE7qkoODZwiv18jJhZIM4or6Uq2O\n3sJhFhvuGXgLL0yd/HO+X6OF9oEeA6ioObSBU9MI79Pxlum0mp9OJjh3QVyTaNkf\nw2yStLkeq1IHxklZ70bEqWgQXENb/pvYscgXVbJ4O5W7eCBI2oshFhZgWAujP5Lc\nlwbL5MKT0a/SXYMiI86jQv0MAv4INlti4ScccRWaFfCCVce3SyFvJli/x8ID27p3\nSHY+VXjO3ToCN28jR0dZjJOGPjBnTYbnnCkuNAI7hQKBgQDurQVBig7dDWkBcQC9\nmduv0K88pXfAhS7/iS7i201ta1q6CdSwyfYBog0ZqQrx0QIAz5Rz/7W3vUMUpjEl\nKa5fMiFJhO7qJ/ApAm9b9SnUtcFb+7JKPkvB2p17ftmEzyr7DYV4N46cc6CMU6zn\ndCZKXJGjJixjjq9ET/15dHPt5wKBgQDIOgZ29Ue47YhuqhwFE3tVXRFdAZWwE2aM\nElNjh+1ZaR45e+/xjrwMqEAaCV6Px63HHhKmF/949HXOJ+iKOGY2X7ttjJi8hY23\n58+C00HPa3IT5b98f8T1DFpVpdzQh3ZTYlZ5b845Hnar30Z5SGg/u9VcYG79AxqQ\nP/3GB+FLdQKBgQDAqxsbFP96omCpsTcP1yvoeWV8Z3aMCvctgOhAaRfPxGGw3E69\nh8r29oHsvPEA09/yF5+XJEzkzftgp+f0P/lrD2SfnJfgnezYrgaHDRl/hFlaj4wV\nMsSk8H1AO94Lv9DKaNfde7u7v/tSTBm/nZtrW96U/TPICl6hnpDXgpIy8QKBgQCt\nmEFKmdYZKzgCWlH4xK9Fj28iZ+FTyz45axoJTSwnPNALnrylfc7kWmtZJ45osgKk\nhBo/DsdcIvaQSmF+lO9pbQ6fKCq0KEZ6j+yFzItePhWl0qd2VYB5xL/9SdRsp0Wb\nfcLjfmAZfaP915LOTEy2FTAi6yjPDAXX0uM+8k4OkQKBgESf328xayjB/DibJFAU\n5uj/Um62MouH5UzJcoahgeJ9BAB/UzxcXj845qvlYIFcDcr11F//mbDeFSkgtYis\nRakZ+JY4lcYPMqwTimUkBBsgwtVXF/3ReJy3VkooYw0a7VFxypLrduV9yY2UNMIC\n9kKxOyDWb6NoIDAwRJUs18P7\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-iltpb@whalewatcher-af026.iam.gserviceaccount.com",
+  "client_id": "101760256446977444364",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-iltpb%40whalewatcher-af026.iam.gserviceaccount.com"
+}
