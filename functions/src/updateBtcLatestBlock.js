@@ -12,21 +12,57 @@ const updateBtcLatestBlock = functions
   .onRun(async (context) => {
     try {
       const db = await admin.firestore()
+      const batch = db.batch()
       const ourLatestBlock = await getDocData('bitcoin_block', 'latest', db)
       const { data } = await axios.get(updateBtcLatestBlockUrl)
       const lastBlockHeight = data.height
       if (ourLatestBlock.height === lastBlockHeight) {
-        functions.logger.log('Block is not updaed yet', lastBlockHeight)
+        functions.logger.log('<< Block is not updaed yet >>', lastBlockHeight)
         return null
       }
       const { data: block } = await axios.get(`https://blockchain.info/rawblock/${lastBlockHeight}`)
       const address = await getColData('bitcoin_address', db)
-      const editedAddress = checkTxs(address, block)
+
+      functions.logger.log('-- my db address data --', address)
+
+      const editedAddress = {}
+      block.tx.map(t => {
+        const beforeObjKeys = Object.keys(editedAddress)
+        t.inputs.map(input => {
+          if (input.prev_out.addr) {
+            const addr = input.prev_out.addr
+            if (address[addr]) {
+              if (!editedAddress[addr]) {
+                editedAddress[addr] = address[addr]
+              }
+              editedAddress[addr].total_sent += input.prev_out.value
+              editedAddress[addr].final_balance -= input.prev_out.value
+            }
+          }
+        })
+        t.out.map(utxo => {
+          if (utxo.addr) {
+            const addr = utxo.addr
+            if (address[addr]) {
+              if (!editedAddress[addr]) {
+                editedAddress[addr] = address[addr]
+              }
+              editedAddress[addr].total_received += utxo.value
+              editedAddress[addr].final_balance += utxo.value
+            }
+          }
+        })
+        const afterObjKeys = Object.keys(editedAddress)
+        if (beforeObjKeys.length !== afterObjKeys.length) {
+          ref = db.collection('bitcoin_address_tx').doc(t.hash)
+          batch.set(ref, t)
+        }
+      })
+
       const objKeys = Object.keys(editedAddress)
 
       functions.logger.log(`blockHeight: ${lastBlockHeight}\n`, `txs length: ${block.tx.length}`)
 
-      const batch = db.batch()
       if (objKeys.length === 0) {
         const blockTime = data.time
         latestBlockRef = db.collection('bitcoin_block').doc('latest')
@@ -37,7 +73,7 @@ const updateBtcLatestBlock = functions
         })
         batch.set(prevBlockRef, ourLatestBlock)
         await batch.commit()
-        functions.logger.log('check complete without commit')
+        functions.logger.log('|| check complete without commit ||')
         return null
       }
 
@@ -46,7 +82,7 @@ const updateBtcLatestBlock = functions
         batch.set(ref, editedAddress[addr])
       }
       await batch.commit()
-      functions.logger.log('check compelete', objKeys)
+      functions.logger.log('** check compelete with commit **', objKeys)
       return null
     } catch (e) {
       functions.logger.log('catch error\n', e)
@@ -56,11 +92,14 @@ const updateBtcLatestBlock = functions
 function checkTxs(address, block) {
   const editedAddress = {}
   block.tx.map(t => {
+    const beforeObjKeys = Object.keys(editedAddress)
     t.inputs.map(input => {
       if (input.prev_out.addr) {
         const addr = input.prev_out.addr
         if (address[addr]) {
-          editedAddress[addr] = address[addr]
+          if (!editedAddress[addr]) {
+            editedAddress[addr] = address[addr]
+          }
           editedAddress[addr].total_sent += input.prev_out.value
           editedAddress[addr].final_balance -= input.prev_out.value
         }
@@ -78,6 +117,11 @@ function checkTxs(address, block) {
         }
       }
     })
+    const afterObjKeys = Object.keys(editedAddress)
+    if (beforeObjKeys.length !== afterObjKeys.length) {
+      ref = db.collection('bitcoin_address').doc(addr)
+      batch.set(ref, editedAddress[addr])
+    }
   })
   return editedAddress
 }

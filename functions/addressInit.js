@@ -7,7 +7,7 @@ initializeApp({
 });
 const db = getFirestore();
 
-const richAddresses = [
+const richAddresses20 = [
   '34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo',
   'bc1qgdjqv0av3q56jvd82tkdjpy7gdp9ut8tlqmgrpmv24sq90ecnvqqjwvw97',
   '3JJmF63ifcamPLiAmLgG96RA599yNtY3EQ',
@@ -30,33 +30,76 @@ const richAddresses = [
   'bc1qjh0akslml59uuczddqu0y4p3vj64hg5mc94c40',
 ]
 
-async function setAddressData (address, data) {
-  const batch = db.batch();
-  const ref = db.collection('bitcoin_address').doc(address)
-  batch.set(ref, {address: data})
-  return await batch.commit()
-}
+const richAddresses40 = [
+  '12XqeqZRVkBDgmPLVY4ZC6Y4ruUUEug8Fx',
+  'bc1qx9t2l3pyny2spqpqlye8svce70nppwtaxwdrp4',
+  '3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B',
+  '12ib7dApVFvg82TXKycWBNpN8kFyiAN1dr',
+  'bc1qf2yvj48mzkj7uf8lc2a9sa7w983qe256l5c8fs',
+  '12tkqA9xSoowkzoERHMWNKsTey55YEBqkv',
+  '38UmuUqPCrFmQo4khkomQwZ4VbY2nZMJ67',
+  '1aXzEKiDJKzkPxTZy9zGc3y1nCDwDPub2',
+  '17MWdxfjPYP2PYhdy885QtihfbW181r1rn',
+  'bc1qjysjfd9t9aspttpjqzv68k0ydpe7pvyd5vlyn37868473lell5tqkz456m',
+  '19D5J8c59P2bAkWKvxSYw8scD3KUNWoZ1C',
+  '3FupZp77ySr7jwoLYEJ9mwzJpvoNBXsBnE',
+  '19N9sDbJ7MDQcPFSjPNqjNDzyRNbNsQ6Zv',
+  '1932eKraQ3Ad9MeNBHb14WFQbNrLaKeEpT',
+  'bc1qcdeadk07jkthules0yw9u9ue9pklvr608ez94jgwcf7h2ldzcg6qwxp9er',
+  '1m5SViB9XNwsusvnnUqpfL9Q1E5EZxPHs',
+  '3LoAAJN3tbMCEXWjGNeiyG2TtzLJYXcG5R',
+  '17rm2dvb439dZqyMe2d4D6AQJSgg6yeNRn',
+  '15cHRgVrGKz7qp2JL2N5mkB2MCFGLcnHxv',
+  'bc1quhruqrghgcca950rvhtrg7cpd7u8k6svpzgzmrjy8xyukacl5lkq0r8l2d',
+]
+
 
 async function main() {
   let count = 0
   setInterval(async () => {
     try {
-      console.log(count)
-      const address = richAddresses[count]
+      console.log(`Start to mine ${richAddresses40[count]} address ${count}`)
+      const address = richAddresses40[count]
       const { data } = await axios.get(`https://blockchain.info/rawaddr/${address}`)
-      const aWeekAgo = Math.floor(Date.now() / 1000) - 604800
-      data.txs.map(t => {
-        if (t.time > aWeekAgo) {
-          
-        }
-      })
-      const res = await setAddressData(address, data)
+      const editedAddress = checkTxs(data)
+      delete editedAddress.txs
+      console.log(editedAddress.week_balance)
+      const batch = db.batch();
+      const ref = db.collection('bitcoin_address').doc(address)
+      batch.set(ref, editedAddress)
+      const res = await batch.commit()
       console.log(res)
       count++
     } catch (e) {
-      console.log(e.response.statusText)
+      console.log(e)
     }
   }, 10000)
 }
 
 main()
+
+function checkTxs(address) {
+  const aWeekAgo = Math.floor(Date.now() / 1000) - 604800
+  address.week_balance = 0
+  address.txs.map(t => {
+    if (t.time > aWeekAgo) {   
+      t.inputs.map(input => {
+        if (input.prev_out.addr) {
+          const addr = input.prev_out.addr
+          if (address.address === addr) {
+            address.week_balance -= input.prev_out.value
+          }
+        }
+      })
+      t.out.map(utxo => {
+        if (utxo.addr) {
+          const addr = utxo.addr
+          if (address.address === addr) {
+            address.week_balance += utxo.value
+          }
+        }
+      })
+    }
+  })
+  return address
+}
