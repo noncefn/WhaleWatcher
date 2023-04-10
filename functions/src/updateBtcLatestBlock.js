@@ -1,7 +1,7 @@
 const functions = require("firebase-functions")
 const admin = require('firebase-admin')
 const axios = require('axios')
-const { getColData, getDocData } = require('./utils/db')
+const { getColData, getDocData, deleteOverAWeekOldTxs } = require('./utils/db')
 
 const updateBtcLatestBlockUrl = `https://blockchain.info/latestblock`
 
@@ -59,20 +59,21 @@ const updateBtcLatestBlock = functions
         }
       })
 
-      const objKeys = Object.keys(editedAddress)
-
       functions.logger.log(`blockHeight: ${lastBlockHeight}\n`, `txs length: ${block.tx.length}`)
 
+      const blockTime = data.time
+      latestBlockRef = db.collection('bitcoin_block').doc('latest')
+      prevBlockRef = db.collection('bitcoin_block').doc('prev')
+      batch.set(latestBlockRef, {
+        height: lastBlockHeight, time: blockTime,
+        time_to_create: blockTime - ourLatestBlock.time
+      })
+      batch.set(prevBlockRef, ourLatestBlock)
+      await deleteOverAWeekOldTxs(db)
+      await batch.commit()
+      
+      const objKeys = Object.keys(editedAddress)
       if (objKeys.length === 0) {
-        const blockTime = data.time
-        latestBlockRef = db.collection('bitcoin_block').doc('latest')
-        prevBlockRef = db.collection('bitcoin_block').doc('prev')
-        batch.set(latestBlockRef, {
-          height: lastBlockHeight, time: blockTime,
-          time_to_create: blockTime - ourLatestBlock.time
-        })
-        batch.set(prevBlockRef, ourLatestBlock)
-        await batch.commit()
         functions.logger.log('|| check complete without commit ||')
         return null
       }
