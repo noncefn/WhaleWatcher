@@ -70,7 +70,6 @@ const updateBtcLatestBlock = functions
       })
       batch.set(prevBlockRef, ourLatestBlock)
       await deleteOverAWeekOldTxs(db)
-      await batch.commit()
       
       const objKeys = Object.keys(editedAddress)
       if (objKeys.length === 0) {
