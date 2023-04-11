@@ -2,9 +2,11 @@
   display: flex;
   flex-direction: column;
   width: 1000px;
+  padding: 0 30px 0 30px;
 }
 
 .tableHead {
   font-weight: 600;
   display: flex;
+  margin-bottom: 10px;
 }

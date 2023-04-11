@@ -3,26 +3,24 @@ const functions = require("firebase-functions")
 const admin = require('firebase-admin')
 const { aWeekAgo } = require('./time')
 
-exports.getColData = async function getColData (col, db) {
-  const snapshot = await db
+const log = functions.logger.log
+
+exports.getColData = async (col) => {
+  const db = await admin.firestore()
+  return await db
     .collection(col)
     .get()
-  const address = {}
-  snapshot.forEach(s => {
-    address[s.id] = s.data()
-  })
-  return address
 }
 
-exports.getDocData = async function getDocData (col, doc, db) {
-  const snapshot = await db
+exports.getDocData = async (col, doc) => {
+  const db = await admin.firestore()
+  return await db
     .collection(col)
     .doc(doc)
     .get()
-  return snapshot.data()
 }
 
-exports.deleteOverAWeekOldTxs = async function deleteOverAWeekOldTxs() {
+exports.deleteOverAWeekOldTxs = async (batch) => {
   const db = await admin.firestore()
   const txRef = db.collection('bitcoin_address_tx')
   const aWeekAgoTime = aWeekAgo()
@@ -31,11 +29,9 @@ exports.deleteOverAWeekOldTxs = async function deleteOverAWeekOldTxs() {
   if (size === 0) {
     return
   }
-  const batch = db.batch()
   overAWeekOldTxs.forEach(t => {
     batch.delete(t.ref)
   })
-  await batch.commit()
-  functions.logger.log(`@@ <${size}> Over a week old txs has been deleted @@`)
+  log(`@@ <${size}> Over a week old txs has been deleted @@`)
 }
 

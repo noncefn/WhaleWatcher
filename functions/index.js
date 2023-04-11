@@ -1,11 +1,15 @@
 const functions = require('firebase-functions')
-const data = require('./src/data')
-const updateBtc = require('./src/updateBtc')
+// const testUpdateBtc = require('./src/updateBtcLatestBlock.test')
 const updateBtcLatestBlock = require('./src/updateBtcLatestBlock')
 const admin = require('firebase-admin')
+
 admin.initializeApp()
+
 const region = 'asia-northeast3'
 
-exports.data = functions.region(region).https.onRequest(data)
-exports.updateBtc = functions.region(region).https.onRequest(updateBtc)
-exports.updateBtcLatestBlock = updateBtcLatestBlock
+// exports.testUpdateBtc = functions.region(region).https.onRequest(testUpdateBtc)
+exports.updateBtcLatestBlock = functions
+  .region(region)
+  .pubsub
+  .schedule('every 5 minutes')
+  .onRun(updateBtcLatestBlock)

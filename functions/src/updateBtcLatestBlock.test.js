@@ -1,13 +1,19 @@
+const { getDocData, getColData, deleteOverAWeekOldTxs } = require('./utils/db')
 const functions = require("firebase-functions")
 const admin = require('firebase-admin')
 const axios = require('axios')
-const { getColData, getDocData, deleteOverAWeekOldTxs } = require('./utils/db')
+
+const express = require('express')
+const cors = require('cors')
+
+const app = express()
+app.use(cors({ origin: true }))
 
 const btcLatestBlockUrl = `https://blockchain.info/latestblock`
 const btcSingleblockUrl = `https://blockchain.info/rawblock`
 const log = functions.logger.log
 
-module.exports = async (context) => {
+module.exports = async (req, res) => {
   try {
     const db = await admin.firestore()
 
@@ -18,7 +24,7 @@ module.exports = async (context) => {
     const lastBlockHeight = data.height
     if (ourLatestBlock.height === lastBlockHeight) {
       log('<< Block is not updaed yet >>', lastBlockHeight)
-      return
+      return res.json(null)
     }
 
     const { data: block } = await axios.get(`${btcSingleblockUrl}/${lastBlockHeight}`)
@@ -43,9 +49,8 @@ module.exports = async (context) => {
 
     const objKeys = Object.keys(editedAddress)
     if (objKeys.length === 0) {
-      await batch.commit()
       log('|| check complete without commit ||')
-      return
+      return res.json(null)
     }
 
     for (const addr of objKeys) {
@@ -54,9 +59,9 @@ module.exports = async (context) => {
     }
     await batch.commit()
     log('** check compelete with commit **', objKeys)
-    return
+    return res.json(null)
   } catch (e) {
-    log('catch error\n', e)
+    log(e)
   }
 }
 

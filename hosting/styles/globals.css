@@ -1,10 +1,12 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: white;
+  background-color: #010409;
+  color: #f0f3f6
 }
 
 button {
   border: 0;
   background-color: transparent;
+  color: #f0f3f6;
 }
