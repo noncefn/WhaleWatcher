@@ -3,12 +3,6 @@ const functions = require("firebase-functions")
 const admin = require('firebase-admin')
 const axios = require('axios')
 
-const express = require('express')
-const cors = require('cors')
-
-const app = express()
-app.use(cors({ origin: true }))
-
 const btcLatestBlockUrl = `https://blockchain.info/latestblock`
 const btcSingleblockUrl = `https://blockchain.info/rawblock`
 const log = functions.logger.log
@@ -59,7 +53,7 @@ module.exports = async (req, res) => {
     }
     await batch.commit()
     log('** check compelete with commit **', objKeys)
-    return res.json(null)
+    return res.json(objKeys)
   } catch (e) {
     log(e)
   }

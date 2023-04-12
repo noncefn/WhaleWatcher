@@ -13,19 +13,8 @@ const url = 'https://blockchain.info/rawaddr/bc1qjh0akslml59uuczddqu0y4p3vj64hg5
 const blockUrl = 'https://blockchain.info/rawblock/784645'
 
 async function main() {
-  const txRef = db.collection('bitcoin_address_tx')
-  const overAWeekOldTxsRes = await txRef.where('time', '<', aWeekAgo()).get()
-  const batch = db.batch()
-  if (overAWeekOldTxsRes.size === 0) {
-    console.log('tests')
-  }
-  overAWeekOldTxsRes.forEach(t => {
-    // if (t.data().time < aWeekAgoTime) {
-      
-    // }
-  })
-  await batch.commit()
-
+  const num = 750000
+  console.log(typeof(num.toString()), num)
   
 }
 
