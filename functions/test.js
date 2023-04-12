@@ -13,8 +13,9 @@ const url = 'https://blockchain.info/rawaddr/bc1qjh0akslml59uuczddqu0y4p3vj64hg5
 const blockUrl = 'https://blockchain.info/rawblock/784645'
 
 async function main() {
-  const num = 750000
-  console.log(typeof(num.toString()), num)
+  const { data } = await axios.get(url)
+  delete data.txs
+  console.log(data)
   
 }
 
