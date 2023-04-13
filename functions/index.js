@@ -11,5 +11,5 @@ const region = 'asia-northeast3'
 exports.updateBtcLatestBlock = functions
   .region(region)
   .pubsub
-  .schedule('every 5 minutes')
+  .schedule('every 3 minutes')
   .onRun(updateBtcLatestBlock)

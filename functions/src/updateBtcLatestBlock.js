@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     const { data } = await axios.get(btcLatestBlockUrl)
     const lastBlockHeight = data.height
     if (ourLatestBlock.height === lastBlockHeight) {
-      log('<< Block is not updaed yet >>', lastBlockHeight)
+      log('<< Block is not updated yet >>', lastBlockHeight)
       return
     }
 

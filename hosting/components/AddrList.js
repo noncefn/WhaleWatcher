@@ -1,7 +1,7 @@
 import AddrItem from './AddrItem'
 import styles from '/styles/components/addrList.module.css'
 
-export default function Index(props) {
+export default (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.tableHead}>

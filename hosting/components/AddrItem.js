@@ -1,6 +1,6 @@
 import styles from '/styles/components/addrItem.module.css'
 
-export default function Index(props) {
+export default (props) => {
   const data = props.data 
   return (
     <div className={styles.row}>

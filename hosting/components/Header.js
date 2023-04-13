@@ -1,6 +1,6 @@
 import styles from '/styles/components/header.module.css'
 
-export default function Header(props) {
+export default (props) => {
   const data = props.data 
   return (
     <div className={styles.container}>

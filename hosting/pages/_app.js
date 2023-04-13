@@ -22,7 +22,7 @@ const font = localFont({
   ]
 })
 
-export default function MyApp({ Component, pageProps }) {
+export default ({ Component, pageProps }) => {
   return (
     <main className={font.className}>
       <Header />
