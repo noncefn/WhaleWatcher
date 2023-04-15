@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
   }
 }
 
-async function checkTxs (block, address, db, batch) {
+function checkTxs (block, address, db, batch) {
   let totalVolume = 0
   let totalSelfVolume = 0
   let totalExchangeBalance = 0

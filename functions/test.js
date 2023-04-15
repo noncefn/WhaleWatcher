@@ -13,10 +13,11 @@ const url = 'https://blockchain.info/rawaddr/bc1qjh0akslml59uuczddqu0y4p3vj64hg5
 const blockUrl = 'https://blockchain.info/rawblock/784645'
 
 async function main() {
-  const { data } = await axios.get(url)
-  delete data.txs
-  console.log(data)
-  
+  const obj = test()
+  console.log(obj.test)
+}
+async function test () {
+  return {test:'test'}
 }
 
 main()
